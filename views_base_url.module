@@ -11,6 +11,17 @@
 function views_base_url_views_api() {
   return array(
     'api' => 3,
-    'path' => drupal_get_path('module', 'views_base_url') . '/includes/views',
+    'path' => backdrop_get_path('module', 'views_base_url') . '/includes/views',
+  );
+}
+
+
+
+/**
+ * Implements hook_autoload_info().
+ */
+function views_base_url_autoload_info() {
+  return array(
+    'ViewsBaseUrlHandlerBaseUrl' => 'includes/views/handlers/views_base_url_handler_base_url.inc',
   );
 }

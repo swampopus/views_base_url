@@ -41,7 +41,7 @@ class ViewsBaseUrlHandlerBaseUrl extends views_handler_field {
     $form['show_link'] = array(
       '#type' => 'checkbox',
       '#title' => t('Display as link'),
-      '#description' => t('Show base URL as link. You can create a custom link using this option.'),
+      '#description' => t('Show base URL as link. You can create a custom link using this option. Replacement patterns are allowed.'),
       '#default_value' => $this->options['show_link'],
     );
 
@@ -99,7 +99,7 @@ class ViewsBaseUrlHandlerBaseUrl extends views_handler_field {
     $form['show_link_options']['link_query'] = array(
       '#type' => 'textfield',
       '#title' => t('Link query'),
-      '#description' => t('Attach queries to the link. If there are multiple queries separate them using a space. For eg: %example1 OR %example2', array('%example1' => 'destination=node/add/page', '%example2' => 'destination=node/add/page q=some/page')),
+      '#description' => t('Attach queries to the link. If there are multiple queries <strong>separate them using a space</strong>. For example: %example1 OR %example2', array('%example1' => 'destination=node/add/page', '%example2' => 'destination=node/add/page q=some/page')),
       '#default_value' => $this->options['show_link_options']['link_query'] ?? '',
     );
 
@@ -171,6 +171,7 @@ If you would like to have the characters \'[\' and \']\' please use the html ent
     $output = '';
     $link_query = array();
     $tokens = $this->get_render_tokens($output);
+    $ktokens = array_keys($tokens);
 
     if ($this->options['show_link']) {
       global $language;
@@ -205,19 +206,34 @@ If you would like to have the characters \'[\' and \']\' please use the html ent
 
         foreach ($queries as $query) {
           $param = explode('=', $query);
-          $link_query[$param[0]] = $param[1];
+          // Replace tokens, strip HTML tags, and urlencode while we are here
+          $link_query[$param[0]] = urlencode(strip_tags(str_replace($ktokens, $tokens, $param[1])));
         }
       }
+
+
+      // Replace tokens with appropriate values.
+      $link_text = str_replace($ktokens, $tokens, $link_text);
+      $link_path = str_replace($ktokens, $tokens, $link_path);
+      $link_class = str_replace($ktokens, $tokens, $link_class);
+      $link_title = str_replace($ktokens, $tokens, $this->options['show_link_options']['link_title']);
+      $link_rel = str_replace($ktokens, $tokens, $this->options['show_link_options']['link_rel']);
+      $link_target = str_replace($ktokens, $tokens, $this->options['show_link_options']['link_target']);
+      $link_fragment = str_replace($ktokens, $tokens, $this->options['show_link_options']['link_fragment']);
+
+      // Remove HTML from these values.
+      $link_text = strip_tags($link_text);
+      $link_title = strip_tags($link_title);
 
       // Create link with options.
       $output = l($link_text, $link_path, array(
         'attributes' => array(
           'class' => $link_class,
-          'title' => $this->options['show_link_options']['link_title'],
-          'rel' => $this->options['show_link_options']['link_rel'],
-          'target' => $this->options['show_link_options']['link_target'],
+          'title' => $link_title,
+          'rel' => $link_rel,
+          'target' => $link_target,
         ),
-        'fragment' => $this->options['show_link_options']['link_fragment'],
+        'fragment' => $link_fragment,
         'query' => $link_query,
         'language' => $language,
         'html' => TRUE,
@@ -227,7 +243,6 @@ If you would like to have the characters \'[\' and \']\' please use the html ent
       $output = $base_url;
     }
 
-    // Replace token with values and return it as output.
-    return str_replace(array_keys($tokens), $tokens, $output);
+    return $output;
   }
 }

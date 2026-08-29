@@ -58,56 +58,56 @@ class ViewsBaseUrlHandlerBaseUrl extends views_handler_field {
       '#type' => 'textfield',
       '#title' => t('Link path'),
       '#description' => t('Drupal path for this link. The base url will be prepended to this path. If nothing provided then base url will appear as link.'),
-      '#default_value' => $this->options['show_link_options']['link_path'],
+      '#default_value' => $this->options['show_link_options']['link_path'] ?? '',
     );
 
     $form['show_link_options']['link_text'] = array(
       '#type' => 'textfield',
       '#title' => t('Link text'),
       '#description' => t('Link text. If nothing provided then link path will appear as link text.'),
-      '#default_value' => $this->options['show_link_options']['link_text'],
+      '#default_value' => $this->options['show_link_options']['link_text'] ?? '',
     );
 
     $form['show_link_options']['link_class'] = array(
       '#type' => 'textfield',
       '#title' => t('Link class'),
       '#description' => t('CSS class to be applied to this link.'),
-      '#default_value' => $this->options['show_link_options']['link_class'],
+      '#default_value' => $this->options['show_link_options']['link_class'] ?? '',
     );
 
     $form['show_link_options']['link_title'] = array(
       '#type' => 'textfield',
       '#title' => t('Link title'),
       '#description' => t('Title attribute for this link.'),
-      '#default_value' => $this->options['show_link_options']['link_title'],
+      '#default_value' => $this->options['show_link_options']['link_title'] ?? '',
     );
 
     $form['show_link_options']['link_rel'] = array(
       '#type' => 'textfield',
       '#title' => t('Link rel'),
       '#description' => t('Rel attribute for this link.'),
-      '#default_value' => $this->options['show_link_options']['link_rel'],
+      '#default_value' => $this->options['show_link_options']['link_rel'] ?? '',
     );
 
     $form['show_link_options']['link_fragment'] = array(
       '#type' => 'textfield',
       '#title' => t('Fragment'),
       '#description' => t('Provide the ID with which you want to create fragment link.'),
-      '#default_value' => $this->options['show_link_options']['link_fragment'],
+      '#default_value' => $this->options['show_link_options']['link_fragment'] ?? '',
     );
 
     $form['show_link_options']['link_query'] = array(
       '#type' => 'textfield',
       '#title' => t('Link query'),
       '#description' => t('Attach queries to the link. If there are multiple queries separate them using a space. For eg: %example1 OR %example2', array('%example1' => 'destination=node/add/page', '%example2' => 'destination=node/add/page q=some/page')),
-      '#default_value' => $this->options['show_link_options']['link_query'],
+      '#default_value' => $this->options['show_link_options']['link_query'] ?? '',
     );
 
     $form['show_link_options']['link_target'] = array(
       '#type' => 'textfield',
       '#title' => t('Link target'),
       '#description' => t('Target attribute for this link.'),
-      '#default_value' => $this->options['show_link_options']['link_target'],
+      '#default_value' => $this->options['show_link_options']['link_target'] ?? '',
     );
 
     // Get a list of the available fields and arguments for token replacement.
